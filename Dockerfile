@@ -14,7 +14,7 @@ COPY . .
 # Build TypeScript code
 RUN npm run build
 
-# Expose port 5000
-EXPOSE 5000
+# Expose port 5001
+EXPOSE 5001
 
 CMD ["npm", "start"] 
