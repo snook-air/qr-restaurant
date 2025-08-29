@@ -94,19 +94,23 @@ io.on('connection', (socket) => {
   });
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Start the server and connect to MongoDB only outside of tests
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5000;
+  httpServer.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 
-// Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-restaurant';
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('MongoDB connection error:', error);
-    console.log('Server will continue running without MongoDB connection');
-  }); 
+  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/qr-restaurant';
+  mongoose
+    .connect(MONGODB_URI)
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.error('MongoDB connection error:', error);
+      console.log('Server will continue running without MongoDB connection');
+    });
+}
+
+export default app;
